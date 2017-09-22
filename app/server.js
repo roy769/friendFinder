@@ -21,16 +21,16 @@ var friends =
   name:"Shaquille",
   photo:"http://4.bp.blogspot.com/-JfQKblOBOls/Teci6bYBkHI/AAAAAAAAAQM/INVKTU44yp0/s1600/shaq.jpg",
   scores:[
-    5,
-    1,
-    4,
-    4,
-    5,
-    1,
     2,
-    5,
-    4,
-    1
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
 ]
 },
 {
@@ -38,15 +38,15 @@ var friends =
   name:"Kobe",
   photo:"http://i.imgur.com/Tbzu6QY.jpg",
   scores:[
-      5,
       1,
-      4,
-      4,
-      5,
       1,
-      2,
-      5,
-      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
       1
     ]
 },
@@ -55,16 +55,16 @@ var friends =
   name:"Beyonce",
   photo:"https://i.pinimg.com/originals/4d/9b/58/4d9b582e7aff2eba9d2293aaa29fd142.jpg",
   scores:[
-      5,
-      1,
-      4,
-      4,
-      5,
-      1,
-      2,
-      5,
-      4,
-      1
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
     ]
 },
 {
@@ -73,15 +73,15 @@ var friends =
   photo:"http://ralisfx.com/blog/wp-content/uploads/2013/08/533102_10150781190316369_117143282_n.jpg",
   scores:[
       5,
-      1,
-      4,
-      4,
       5,
-      1,
-      2,
       5,
-      4,
-      1
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
     ]
 },
 {
@@ -89,16 +89,16 @@ var friends =
   name:"Xena",
   photo:"https://i.pinimg.com/736x/93/3d/6d/933d6d40ffd099c5af3c82566d6ce501--warrior-queen-xena-warrior-princess.jpg",
   scores:[
-      5,
-      1,
       4,
       4,
-      5,
-      1,
-      2,
-      5,
       4,
-      1
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
     ]
 },
 {
@@ -123,14 +123,14 @@ var friends =
   name:"Wendy",
   photo:"https://i.ytimg.com/vi/w4jFvWQ_IGc/maxresdefault.jpg",
   scores:[
-      5,
+      2,
       1,
       4,
       4,
-      5,
+      3,
       1,
       2,
-      5,
+      1,
       4,
       1
     ]
@@ -140,15 +140,15 @@ var friends =
   name:"Santa",
   photo:"http://static1.squarespace.com/static/5512e30de4b018f9300e3a55/551391f5e4b09de0ff5e04a5/567cb01a1c1210bb27409d50/1451014122605/?format=1000w",
   scores:[
-      5,
+      1,
       1,
       4,
       4,
-      5,
+      1,
       1,
       2,
       5,
-      4,
+      1,
       1
     ]
 },
@@ -157,15 +157,15 @@ var friends =
   name:"Dennis",
   photo:"https://static.vibe.com/files/images/dennisrodmanincostume-445x560.jpeg",
   scores:[
-      5,
+      2,
       1,
       4,
       4,
-      5,
+      2,
       1,
       2,
-      5,
-      4,
+      2,
+      2,
       1
     ]
 },
@@ -174,15 +174,15 @@ var friends =
   name:"Bruce",
   photo:"http://i0.wp.com/radaronline.com/wp-content/uploads/2015/05/bruce-jenner-surgery-face-feminine-02.jpg?resize=990%2C551",
   scores:[
-      5,
+      1,
       1,
       4,
       4,
-      5,
+      1,
       1,
       2,
-      5,
-      4,
+      1,
+      1,
       1
            ]
   }];
@@ -234,7 +234,48 @@ var friends =
         friends.push(newFriends);
 
         res.json(newFriends);
+
+        //grab scores(modyfied from StefanieDing code)
+        var newFriendsScores = req.body.scores;
+
+        var scoresArray = [];
+
+        var friendCount = 0;
+
+        var bestMatch = 0;
+
+        //iterate friends
+
+        for(var i =0; i < newFriends.length; i++)
+        {
+          var diffScore = 0;
+
+          //compare friends
+          for (var j =0; j < newFriendsScores.length; j++)
+          {
+            diffScore += (Math.abs(parseInt(friendsList[i].scores[j])-parseInt(newFriendsScores[j])));
+          }
+          //push it
+            scoresArray.push(diffScore);
+        }
+        //compare aftermath
+        for (var i =0; i < scoresArray.length; i++)
+        {
+          if (scoresArray[i] <= scoresArray[bestMatch])
+          {
+            bestMatch = i;
+          }
+        }
+        //return bestMatch
+        var match = newFriends[bestMatch];
+
+        res.json(match);
+
+        newFriends.push(req.body);
     });
+
+
+
 
 //server is listening
 app.listen(PORT, function ()
